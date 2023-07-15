@@ -1,5 +1,4 @@
 import axios from 'axios';
-// const BASE_URL = 'https://anarchyschedule-api.onrender.com';
 
 //Development
 const BASE_URL = 'https://anarchyschedule-api.onrender.com';
