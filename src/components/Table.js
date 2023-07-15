@@ -1,13 +1,16 @@
+const Table = ({ day, setWeeklySchedule, weeklySchedule, index, handleChange }) => {
 
-const Table = ({day, setWeeklySchedule, weeklySchedule, index, handleChange}) => {
-    
-    const remove = (name, i) => {
-        const newArray = weeklySchedule[index].employees.filter(item=>item.name != name);
+    //Removes element from the weekly schedule array.
+    const remove = (name) => {
+        console.log('cliked')
+        const newArray = weeklySchedule[index].employees.filter(item => item.name !== name);
         const tempWeeklySchedule = [...weeklySchedule];
-        tempWeeklySchedule[index].employee = newArray;
+        tempWeeklySchedule[index].employees = newArray;
+        console.log(tempWeeklySchedule);
         setWeeklySchedule(tempWeeklySchedule);
     }
 
+    //adds an employee object to the employees array
     const addEmployee = (index) => {
         const tempWeeklySchedule = [...weeklySchedule];
         tempWeeklySchedule[index].employees.push({
@@ -17,9 +20,10 @@ const Table = ({day, setWeeklySchedule, weeklySchedule, index, handleChange}) =>
         setWeeklySchedule(tempWeeklySchedule);
     }
 
+    //mapped through the employees array for each element in the weekly schedule array.
     const mappedEmployees = weeklySchedule[index].employees.map((employee, i) => {
         return (
-            <tr>
+            <tr key={i}>
                 <td>
                     <select onChange={(e) => handleChange(e, index, i)} name="time" value={weeklySchedule[index].employees[i].time}>
                         <option defaultValue>Time</option>
@@ -36,7 +40,7 @@ const Table = ({day, setWeeklySchedule, weeklySchedule, index, handleChange}) =>
                         <option>Seline</option>
                     </select>
                 </td>
-                <td onClick={()=>remove(weeklySchedule[index].employees[i].name, i)}>
+                <td onClick={() => remove(weeklySchedule[index].employees[i].name)}>
                     x
                 </td>
             </tr>
@@ -58,7 +62,13 @@ const Table = ({day, setWeeklySchedule, weeklySchedule, index, handleChange}) =>
             <tbody>
                 {mappedEmployees}
             </tbody>
-            <button style={styles.button} onClick={(e)=>addEmployee(index)}>Add employee</button>
+            <tfoot>
+                <tr>
+                    <td style={{border: 'none'}}>
+                        <button style={styles.button} onClick={(e) => addEmployee(index)}>Add employee</button>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     )
 }

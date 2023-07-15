@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Table from "./Table";
-import ViewSchedule from "../screens/ViewSchedule";
+import axios from "../api/axios";
+import { Link } from "react-router-dom";
 
 const DAYSOFWEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -16,6 +17,9 @@ const SetSchedule = () => {
         }
     ]);
 
+    const [success, setSuccess] = useState("");
+
+    // Loops through the DAYSOFWEEK array and sets each element equal to the day key.
     useEffect(() => {
         DAYSOFWEEK.forEach((day) => setWeeklySchedule((prevData) => [...prevData, {
             day, employees: [{
@@ -29,6 +33,7 @@ const SetSchedule = () => {
         e.preventDefault();
         const { name, value } = e.target;
         const newArray = [...weeklySchedule];
+        // Handles the change of the specified element (index) for nested employee array.
         newArray[index].employees[i][name] = value;
         setWeeklySchedule(newArray);
     }
@@ -46,8 +51,17 @@ const SetSchedule = () => {
         )
     })
 
-    const save = () => {
-        console.log(weeklySchedule)
+    const save = async () => {
+        let newObj = {
+            schedule: ""
+        }
+        newObj.schedule = weeklySchedule;
+        // Makes a, object copy of the state variable to send the database.
+        // This is to save the schedule into one document.
+        newObj.schedule.shift();
+        const response = await axios.put('/schedule/admin/setschedule', newObj);
+        response.status === 200 ? setSuccess("Schedule Sent!") : setSuccess("Something went wrong");
+        console.log(response.status)
     }
 
     return (
@@ -56,10 +70,24 @@ const SetSchedule = () => {
                 <img style={styles.logo} src='https://ih1.redbubble.net/image.1120040838.6734/flat,750x1000,075,f.jpg' alt="logo" />
                 <h1 style={styles.barName}>The Anarchy Library</h1>
             </div>
-            {mappedWeeklySchedule}
-            <button onClick={() => save()}>Save Schedule</button>
-            <ViewSchedule weeklySchedule={weeklySchedule}/>
-        </div>
+            {
+                success.length > 0
+                    ? (
+                        <div style={styles.successContainer}>
+                           <p style={styles.successMessage}>{success}</p>
+                           <Link to='/viewschedule'>View Schedule</Link>
+                        </div>
+                    )
+                    : (
+                        <>
+                            {mappedWeeklySchedule}
+                            <button onClick={() => save()}>Save Schedule</button>
+                        </>
+
+                    )
+
+            }
+        </div >
     )
 }
 
@@ -75,6 +103,19 @@ const styles = {
     barName: {
         width: '80%',
         color: 'white'
+    },
+    successContainer: {
+        width: '100%',
+        padding: '10px',
+        border: '2px solid red',
+        display: 'flex',
+        flexDirection: 'column',
+        placeItems: 'center',
+        justifyContent: 'center'
+    },
+    successMessage: {
+        color: 'white',
+        fontSize: '1.5rem'
     }
 }
 
