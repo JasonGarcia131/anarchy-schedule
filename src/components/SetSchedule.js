@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Table from "./Table";
 import axios from "../api/axios";
 import { Link } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const DAYSOFWEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -18,6 +19,7 @@ const SetSchedule = () => {
     ]);
 
     const [success, setSuccess] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     // Loops through the DAYSOFWEEK array and sets each element equal to the day key.
     useEffect(() => {
@@ -52,6 +54,7 @@ const SetSchedule = () => {
     })
 
     const save = async () => {
+        setIsLoading(true);
         let newObj = {
             schedule: ""
         }
@@ -60,33 +63,46 @@ const SetSchedule = () => {
         // This is to save the schedule into one document.
         newObj.schedule.shift();
         const response = await axios.put('/schedule/admin/setschedule', newObj);
+        setIsLoading(false);
         response.status === 200 ? setSuccess("Schedule Sent!") : setSuccess("Something went wrong");
-        console.log(response.status)
+
     }
 
     return (
         <div>
-            <div style={styles.logoContainer}>
-                <img style={styles.logo} src='https://ih1.redbubble.net/image.1120040838.6734/flat,750x1000,075,f.jpg' alt="logo" />
-                <h1 style={styles.barName}>The Anarchy Library</h1>
-            </div>
             {
-                success.length > 0
-                    ? (
-                        <div style={styles.successContainer}>
-                           <p style={styles.successMessage}>{success}</p>
-                           <Link to='/viewschedule'>View Schedule</Link>
+                !isLoading
+                    ? <>
+                        <div style={styles.logoContainer}>
+                            <img style={styles.logo} src='https://ih1.redbubble.net/image.1120040838.6734/flat,750x1000,075,f.jpg' alt="logo" />
+                            <h1 style={styles.barName}>The Anarchy Library</h1>
                         </div>
-                    )
-                    : (
-                        <>
-                            {mappedWeeklySchedule}
-                            <button onClick={() => save()}>Save Schedule</button>
-                        </>
+                        {
+                            success.length > 0
+                                ? (
+                                    <div style={styles.successContainer}>
+                                        <p style={styles.successMessage}>{success}</p>
+                                        <Link to='/viewschedule'>View Schedule</Link>
+                                    </div>
+                                )
+                                : (
+                                    <>
+                                        {mappedWeeklySchedule}
+                                        <button onClick={() => save()}>Save Schedule</button>
+                                    </>
 
-                    )
+                                )
 
+                        }
+                    </>
+                    : <div style={{ textAlign: 'center' }}>
+                        <ClipLoader
+                            size={150}
+                            color="blue"
+                        />
+                    </div>
             }
+
         </div >
     )
 }
