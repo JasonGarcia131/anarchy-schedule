@@ -15,9 +15,13 @@ const ViewSchedule = () => {
     }, []);
 
     const getSchedule = async () => {
+        const controller = new AbortController();
         setIsLoading(true);
-        const response = await axios.get('/schedule');
+        const response = await axios.get('/schedule',{
+            signal: controller.signal
+        });
         setWeeklySchedule(response.data[0].schedule);
+        controller.abort();
         //Gets the day from timestamp
         const date = new Date(response.data[0].createdAt);
         let day = date.getDay();
