@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 //Development
-// const BASE_URL = 'https://anarchyschedule-api.onrender.com';
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'https://anarchyschedule-api.onrender.com';
+// const BASE_URL = 'http://localhost:5000';
 
 
 export default axios.create({
