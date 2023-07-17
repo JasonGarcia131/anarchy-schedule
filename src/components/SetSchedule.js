@@ -95,7 +95,7 @@ const SetSchedule = () => {
 
                         }
                     </>
-                    : <div style={{ textAlign: 'center' }}>
+                    : <div style={styles.loader}>
                         <ClipLoader
                             size={150}
                             color="blue"
@@ -132,6 +132,13 @@ const styles = {
     successMessage: {
         color: 'white',
         fontSize: '1.5rem'
+    },
+    loader: {
+        display: 'flex', 
+        placeItems: 'center', 
+        placeContent: 'center', 
+        height: '100vh', 
+        width: '100%' 
     }
 }
 

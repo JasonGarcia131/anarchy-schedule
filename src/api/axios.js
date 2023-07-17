@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-//Development
+//Production
 const BASE_URL = 'https://anarchyschedule-api.onrender.com';
+
+//Development
 // const BASE_URL = 'http://localhost:5000';
 
 
