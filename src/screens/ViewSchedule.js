@@ -23,8 +23,9 @@ const ViewSchedule = () => {
         });
         setWeeklySchedule(response.data[0].schedule);
         controller.abort();
+
         // Gets the day from timestamp in a numerical value.
-        const date = new Date(response.data[0].createdAt);
+        const date = new Date(response.data[0].updatedAt);
         let day = date.getDay();
         let dayOfWeek = day === 0 ? DAYSOFWEEK[6] : DAYSOFWEEK[day - 1];
         setUpdated(dayOfWeek);
@@ -101,7 +102,7 @@ const styles = {
         flexDirection: 'row'
     },
     logo: {
-        width: '20%'
+        width: "60px"
     },
     barName: {
         width: '80%',

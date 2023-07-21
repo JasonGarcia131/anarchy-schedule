@@ -114,7 +114,7 @@ const styles = {
         flexDirection: 'row'
     },
     logo: {
-        width: '20%'
+        width: '60px'
     },
     barName: {
         width: '80%',
